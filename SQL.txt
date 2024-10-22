@@ -1,0 +1,72 @@
+CREATE TABLE Dados (
+    OrderDate DATETIME,
+    Valor_total DECIMAL(18, 2),
+    StateProvinceID INT,
+    Nome NVARCHAR(255),
+    Endereco NVARCHAR(255),
+    Produto NVARCHAR(255),
+    Cod_produto NVARCHAR(255),
+    Territorio NVARCHAR(255)
+);
+
+
+-- Inserção dos dados
+INSERT INTO Dados(OrderDate, Valor_total, StateProvinceID, Nome,Endereco,Territorio,Produto,Cod_produto)
+SELECT 
+    SOH.OrderDate,  
+    SUM(SOH.TotalDue) AS Valor_total, 
+    A.StateProvinceID, 
+    A.AddressLine1 AS Nome,
+    A.City AS Endereco,
+    SST.Name AS Territorio,
+    P.Name AS ProdutoNome,
+    P.ProductNumber
+FROM 
+    Sales.SalesOrderHeader AS SOH
+INNER JOIN 
+    Sales.SalesTerritory AS SST ON SOH.TerritoryID = SST.TerritoryID
+INNER JOIN 
+    Sales.SalesOrderDetail AS SOD ON SOH.SalesOrderID = SOD.SalesOrderID
+INNER JOIN 
+    Production.Product AS P ON SOD.ProductID = P.ProductID
+INNER JOIN 
+    Person.Address AS A ON SOH.ShipToAddressID = A.AddressID
+GROUP BY 
+    SOH.OrderDate, 
+    A.StateProvinceID, 
+    A.AddressLine1, 
+    A.City, 
+    SST.Name,
+    P.Name, 
+    P.ProductNumber;
+
+
+SELECT 
+    SOH.OrderDate,  
+    SUM(SOH.TotalDue) AS Valor_total, 
+    A.StateProvinceID, 
+    A.AddressLine1 AS Nome,
+    A.City AS Endereco,
+    SST.Name AS Territorio,
+    P.Name AS ProdutoNome,
+    P.ProductNumber
+FROM 
+    Sales.SalesOrderHeader AS SOH
+INNER JOIN 
+    Sales.SalesTerritory AS SST ON SOH.TerritoryID = SST.TerritoryID
+INNER JOIN 
+    Sales.SalesOrderDetail AS SOD ON SOH.SalesOrderID = SOD.SalesOrderID
+INNER JOIN 
+    Production.Product AS P ON SOD.ProductID = P.ProductID
+INNER JOIN 
+    Person.Address AS A ON SOH.ShipToAddressID = A.AddressID
+GROUP BY 
+    SOH.OrderDate, 
+    A.StateProvinceID, 
+    A.AddressLine1, 
+    A.City, 
+    SST.Name,
+    P.Name, 
+    P.ProductNumber
+
+
