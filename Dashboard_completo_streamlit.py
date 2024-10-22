@@ -4,7 +4,7 @@ import pandas as pd
 # Carregar dados
 @st.cache_data
 def load_data():
-    data = pd.read_excel(r'C:\Users\LicidioSantos\Downloads\Case - BI\Dadosextraidos_.xlsx')
+    data = pd.read_excel(r'C:\Caminhodoarquivo\Dadosextraidos_.xlsx')
     if 'OrderDate' not in data.columns or 'Valor_total' not in data.columns:
         st.error("As colunas 'OrderDate' e 'Valor_total' devem estar presentes no arquivo.")
         return None
